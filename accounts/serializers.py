@@ -1,10 +1,12 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from .models import *
+
 class UserRegisterSerializer(serializers.ModelSerializer):
 
     username=serializers.CharField(max_length=150,required=True)
     email=serializers.EmailField(required=True)
+
     class Meta:
         model=User
         fields=['first_name','last_name','username','email','password']
@@ -19,12 +21,10 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         return value
 
 
-
-
-
-
 class UserLoginSerializer(serializers.ModelSerializer):
+
     username=serializers.CharField(max_length=100,required=True)
+    
     class Meta:
         model=User
         fields=['username','password']
