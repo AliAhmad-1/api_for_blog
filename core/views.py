@@ -123,3 +123,18 @@ class MostCommentedPost(APIView):
 
 
 
+class LikePostView(APIView):
+
+    def post(self,request,post_id,format=None):
+        post=get_object_or_404(Post,uid=post_id)
+        user=self.request.user
+        action='Like'
+        if user in  post.users_like.all():
+            post.users_like.remove(user)
+            action='Dislike'
+        else:
+            post.users_like.add(user)
+            
+        return Response({'msg':f'You are {action}d this Post'},status=status.HTTP_200_OK)
+        
+        

@@ -10,6 +10,9 @@ from rest_framework.generics import RetrieveAPIView,UpdateAPIView
 from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
 # Create your views here.
+
+
+
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
 

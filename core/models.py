@@ -6,6 +6,7 @@ from taggit.managers import TaggableManager
 from taggit.models import GenericUUIDTaggedItemBase, TaggedItemBase
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
+from django.utils.text import slugify
 
 class UUIDTaggedItem(GenericUUIDTaggedItemBase, TaggedItemBase):
     # If you only inherit GenericUUIDTaggedItemBase, you need to define
@@ -30,6 +31,7 @@ class Post(models.Model):
         PUBLISHED=('PB','published')
     uid=models.UUIDField(primary_key=True,editable=False,default=uuid.uuid4,unique=True)
     author=models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='user_posts')
+    users_like=models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='posts_liked',blank=True)
     title=models.CharField(max_length=250)
     slug=models.SlugField(max_length=250,unique_for_date='publish')
     text=models.TextField()
@@ -44,13 +46,19 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
-    def get_absolute_url(self):
-        return reverse("post_detail", args=[self.publish.year,self.publish.month,self.publish.day,self.slug])
-    
-    
     class Meta:
         ordering=['-publish']
         indexes=[models.Index(fields=['-publish'])]
+
+
+    def get_absolute_url(self):
+        return reverse("post_detail", args=[self.publish.year,self.publish.month,self.publish.day,self.slug])
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug=slugify(self.title)
+        super().save(*args, **kwargs)
+
 
 
 class Comment(models.Model):
@@ -69,3 +77,4 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'comment by {self.user.username} on {self.post.title}'
+

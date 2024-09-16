@@ -9,6 +9,7 @@ urlpatterns = [
    path('<uuid:id>/comments/',views.CommentListView.as_view(),name='comment_list'),
    path('<uuid:id>/comment/add/',views.CommentCreateView.as_view(),name='comment_create'),
    path('comment/<uuid:comment_id>/update/',views.CommentUpdateView.as_view(),name='comment_Update'),
+   path('post/<uuid:post_id>/like/',views.LikePostView.as_view(),name='like')
 
   
 ]
