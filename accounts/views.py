@@ -33,9 +33,10 @@ class RegitserView(APIView):
 class LoginView(APIView):
     def post(self,request,format=None):
         serializers=UserLoginSerializer(data=request.data)
-        if serializers.is_valid(raise_exception=True):
+        if serializers.is_valid():
             username=serializers.data.get('username')
             password=serializers.data.get('password')
+
             user=authenticate(username=username,password=password)
             if user is not None:
                 token=get_tokens_for_user(user)
