@@ -30,13 +30,13 @@ services:
       - db
       - web_migrate
 
-  db:
-    image: postgres:12.20-bullseye
-    restart: always
-    volumes:
-      - ./data/db:/var/lib/postgresql/data
-
-    environment:
-      - POSTGRES_DB= blog_api
-      - POSTGRES_USER=blog_api
-      - POSTGRES_PASSWORD=blog_api
+  db: 
+    image: postgres:12.20-bullseye 
+    ports: 
+      - 5432:5432 
+    volumes: 
+      - ./data/db:/var/lib/postgresql/data 
+    environment: 
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres 
+      - POSTGRES_DB=postgres
